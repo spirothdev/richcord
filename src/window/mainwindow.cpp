@@ -4,8 +4,6 @@
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    RichcordTesting testing(this);
-    testing.start();
 }
 
 MainWindow::~MainWindow() {
