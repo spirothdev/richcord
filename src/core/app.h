@@ -1,8 +1,7 @@
 #pragma once
 #include <QApplication>
-#include <QEvent>
 
-#define rApp RichcordApp::getAppInstance()
+#define rApp RichcordApp::getCurrentInstance()
 
 class RichcordApp : public QApplication {
 public:
