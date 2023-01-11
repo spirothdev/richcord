@@ -35,9 +35,6 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED
         )
-qt6_wrap_ui(${RICHCORD_WINDOW_SOURCES}
-        ${RICHCORD_UI_SOURCES}
-        )
 add_executable(${RICHCORD_TARGET}
         ${RICHCORD_UI_FILES}
         ${RICHCORD_CORE_SOURCES}
