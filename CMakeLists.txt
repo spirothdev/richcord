@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.0)
 project(Richcord)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -7,18 +7,19 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 set(RICHCORD_ROOT_PATH "${CMAKE_SOURCE_DIR}/src")
-set(RICHCORD_CORE_INCLUDE_PATH "${RICHCORD_ROOT_PATH}/core")
-set(RICHCORD_WINDOW_INCLUDE_PATH "${RICHCORD_ROOT_PATH}/window")
+set(RICHCORD_CORE_SOURCE_PATH "${RICHCORD_ROOT_PATH}/core")
+set(RICHCORD_WINDOW_SOURCE_PATH "${RICHCORD_ROOT_PATH}/window")
 
 set(RICHCORD_CORE_SOURCES
-        "${RICHCORD_CORE_INCLUDE_PATH}/activity.cpp"
-        "${RICHCORD_CORE_INCLUDE_PATH}/app.cpp"
+        "${RICHCORD_CORE_SOURCE_PATH}/app.h"
+        "${RICHCORD_CORE_SOURCE_PATH}/app.cpp"
         )
 set(RICHCORD_WINDOW_SOURCES
-        "${RICHCORD_WINDOW_INCLUDE_PATH}/mainwindow.cpp"
+        "${RICHCORD_WINDOW_SOURCE_PATH}/mainwindow.h"
+        "${RICHCORD_WINDOW_SOURCE_PATH}/mainwindow.cpp"
         )
 set(RICHCORD_UI_FILES
-        "${RICHCORD_WINDOW_INCLUDE_PATH}/mainwindow.ui"
+        "${RICHCORD_WINDOW_SOURCE_PATH}/mainwindow.ui"
         )
 set(RICHCORD_TARGET "richcord")
 
@@ -26,8 +27,8 @@ add_subdirectory(gamesdk)
 
 list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS
         ${RICHCORD_ROOT_PATH}
-        ${RICHCORD_CORE_INCLUDE_PATH}
-        ${RICHCORD_WINDOW_INCLUDE_PATH}
+        ${RICHCORD_CORE_SOURCE_PATH}
+        ${RICHCORD_WINDOW_SOURCE_PATH}
         )
 find_package(Qt6 COMPONENTS
         Core
@@ -35,8 +36,12 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED
         )
+qt_add_resources(RICHCORD_RESOURCE_FILE
+        "${CMAKE_SOURCE_DIR}/resources.qrc"
+        )
 add_executable(${RICHCORD_TARGET}
         ${RICHCORD_UI_FILES}
+        ${RICHCORD_RESOURCE_FILE}
         ${RICHCORD_CORE_SOURCES}
         ${RICHCORD_WINDOW_SOURCES}
         "${RICHCORD_ROOT_PATH}/main.cpp"
@@ -48,8 +53,8 @@ set_target_properties(${RICHCORD_TARGET} PROPERTIES
         )
 target_include_directories(${RICHCORD_TARGET} PRIVATE
         "${CMAKE_AUTOGEN_BUILD_DIR}/include"
-        ${RICHCORD_CORE_INCLUDE_PATH}
-        ${RICHCORD_WINDOW_INCLUDE_PATH}
+        ${RICHCORD_CORE_SOURCE_PATH}
+        ${RICHCORD_WINDOW_SOURCE_PATH}
         )
 target_link_libraries(${RICHCORD_TARGET}
         richcord-gamesdk
@@ -87,11 +92,10 @@ if (WIN32)
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${DISCORD_GAMESDK_LIB_BIN_RUNTIME}"
             $<TARGET_FILE_DIR:${RICHCORD_TARGET}>)
-    # CMake crashes at this point, temporarily commenting for now.
     # foreach (QT_LIB Core Gui Widgets)
-    #     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    #     add_custom_command(TARGET ${RICHCORD_TARGET} POST_BUILD
     #             COMMAND ${CMAKE_COMMAND} -E copy
     #             "${QT_INSTALL_PATH}/bin/Qt6${QT_LIB}${DEBUG_SUFFIX}.dll"
-    #             "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
+    #             "$<TARGET_FILE_DIR:${RICHCORD_TARGET}>")
     # endforeach (QT_LIB)
 endif ()
