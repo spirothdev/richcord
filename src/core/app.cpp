@@ -15,12 +15,12 @@ discord::Activity RichcordApp::getActivity() {
     return _activity;
 }
 
-discord::User *RichcordApp::getDiscordUser() {
-    return _discordUser;
-}
-
 discord::Core *RichcordApp::getDiscordCore() {
     return _discordCore;
+}
+
+bool RichcordApp::isActivityShown() {
+    return _isActivityShown;
 }
 
 long long RichcordApp::getDiscordAppId() {
@@ -28,10 +28,12 @@ long long RichcordApp::getDiscordAppId() {
 }
 
 void RichcordApp::changeDiscordAppId(long long id) {
+    bool wasActivityShown = _isActivityShown;
+    if (_discordAppId == id) return;
     if (_discordCore != nullptr) destroyDiscordCore();
-    if (_discordAppId != id) _discordAppId = id;
+    _discordAppId = id;
     initDiscordCore();
-    applyActivityChanges();
+    if (wasActivityShown) applyActivityChanges();
 }
 
 void RichcordApp::applyActivityChanges() {
@@ -39,9 +41,12 @@ void RichcordApp::applyActivityChanges() {
         qWarning() << "applyActivityChanges was called before GameSDK was even initialized.";
         return;
     }
+    if (_isActivityShown) {
+        clearActivity();
+    }
 
     _discordCore->ActivityManager().UpdateActivity(_activity, [this](discord::Result result) {
-        if (result != discord::Result::Ok) {
+        if (result != discord::Result::Ok && result != discord::Result::TransactionAborted) {
             emit activityChangeFailure(result);
             return;
         }
@@ -63,7 +68,7 @@ void RichcordApp::resetActivityToDefault() {
     _activity.GetAssets().SetLargeImage("default");
     _activity.GetTimestamps().SetStart(QDateTime::currentMSecsSinceEpoch());
     _activity.SetInstance(!_activity.GetInstance());
-    applyActivityChanges();
+    if (_isActivityShown) applyActivityChanges();
 }
 
 RichcordApp *RichcordApp::getCurrentInstance() {
@@ -81,32 +86,59 @@ void RichcordApp::setupActivityCallbacks() {
         return;
     }
 
+    connect(this, &RichcordApp::activityChangeStarted, this, [this]() {
+        qDebug() << "Applying changes to activity...";
+    });
     connect(this, &RichcordApp::activityChangeSuccess, this, [this]() {
         qDebug() << "Changes to activity applied successfully.";
+        _isActivityShown = true;
     });
     connect(this, &RichcordApp::activityChangeFailure, this, [this](discord::Result code) {
         auto codeString = QString::number(static_cast<double>(code));
-        qCritical() << "An error occurred while applying activity changes: " << codeString;
+        qCritical() << "An error occurred while applying activity changes:" << codeString;
     });
 }
 
-void RichcordApp::setupDiscordUserEvents() {
+void RichcordApp::clearActivity() {
     if (_discordCore == nullptr) {
-        qWarning() << "Setting up user events but GameSDK is destroyed.";
+        qWarning() << "clearActivity was called before GameSDK was even initialized.";
+        return;
+    }
+    if (!_isActivityShown) {
+        qWarning() << "clearActivity was called but activity is already cleared.";
         return;
     }
 
-    _discordCore->UserManager().OnCurrentUserUpdate.Connect([this]() {
-        _discordCore->UserManager().GetCurrentUser(_discordUser);
-        emit discordUserUpdated(_discordUser);
+    _discordCore->ActivityManager().ClearActivity([this](discord::Result result) {
+        if (result != discord::Result::Ok && result != discord::Result::TransactionAborted) {
+            auto resultStr = QString::number(static_cast<double>(result));
+            qWarning() << "An activity error occurred while clearing:" << resultStr;
+        }
+
+        _isActivityShown = false;
     });
 }
 
 void RichcordApp::initDiscordCore() {
     discord::Core::Create(_discordAppId, DiscordCreateFlags_Default, &_discordCore);
-    setupDiscordUserEvents();
+    qDebug() << "Initialized Discord GameSDK with App ID:" << QString::number(_discordAppId);
 }
 
 void RichcordApp::destroyDiscordCore() {
-    delete _discordCore;
+    if (_isActivityShown) {
+        // We don't use clearActivity here as it doesn't know when it will receive the callback
+        _discordCore->ActivityManager().ClearActivity([this](discord::Result result) {
+            if (result != discord::Result::Ok && result != discord::Result::TransactionAborted) {
+                auto resultStr = QString::number(static_cast<double>(result));
+                qWarning() << "An activity error occurred while destroying Discord GameSDK:" << resultStr;
+            }
+
+            _isActivityShown = false;
+            delete _discordCore;
+            _discordCore = nullptr;
+        });
+    } else {
+        delete _discordCore;
+        _discordCore = nullptr;
+    }
 }

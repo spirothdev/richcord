@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QEvent>
 #include <QString>
+#include <QStyleFactory>
 
 #include "discord.h"
 
@@ -18,8 +19,8 @@ public:
     ~RichcordApp() override;
 
     discord::Activity getActivity();
-    discord::User *getDiscordUser();
     discord::Core *getDiscordCore();
+    bool isActivityShown();
     long long getDiscordAppId();
     void changeDiscordAppId(long long id);
     void applyActivityChanges();
@@ -31,19 +32,18 @@ signals:
     void activityChangeStarted();
     void activityChangeSuccess();
     void activityChangeFailure(discord::Result code);
-    void discordUserUpdated(discord::User *user);
 
 protected:
     bool event(QEvent *e) override;
 
 private:
     void setupActivityCallbacks();
-    void setupDiscordUserEvents();
+    void clearActivity();
     void initDiscordCore();
     void destroyDiscordCore();
 
     discord::Activity _activity{};
-    discord::User *_discordUser = nullptr;
     discord::Core *_discordCore = nullptr;
+    bool _isActivityShown = false;
     long long _discordAppId = 1060543817830375476; // Default App Id
 };

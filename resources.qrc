@@ -1,9 +1,12 @@
 <RCC>
     <qresource prefix="/"/>
     <qresource prefix="/images">
-        <file alias="header_main.png">resources/images/header_main.png</file>
+        <file alias="header_main">resources/images/header_main.png</file>
     </qresource>
-    <qresource prefix="/stylesheets">
-        <file alias="discord.qss">resources/stylesheets/discord.qss</file>
+    <qresource prefix="/icons">
+        <file alias="settings">resources/icons/settings.png</file>
+        <file alias="about">resources/icons/about.png</file>
+        <file alias="edit">resources/icons/edit.png</file>
+        <file alias="reconnect">resources/icons/reconnect.png</file>
     </qresource>
 </RCC>

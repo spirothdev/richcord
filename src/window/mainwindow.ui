@@ -20,12 +20,102 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>Richcord</string>
+   <string>‎</string>
   </property>
   <widget class="QWidget" name="root">
    <layout class="QVBoxLayout" name="_2">
     <item>
-     <layout class="QHBoxLayout" name="header"/>
+     <layout class="QHBoxLayout" name="header">
+      <property name="rightMargin">
+       <number>8</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="logo">
+        <property name="pixmap">
+         <pixmap resource="../../resources.qrc">:/images/header_main</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="headerSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="reconnect">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="visible">
+         <bool>false</bool>
+        </property>
+        <property name="toolTip">
+         <string>Reconnect to Discord</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../../resources.qrc">
+          <normaloff>:/icons/reconnect</normaloff>:/icons/reconnect</iconset>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="preferences">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="toolTip">
+         <string>Preferences</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../../resources.qrc">
+          <normaloff>:/icons/settings</normaloff>:/icons/settings</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>18</width>
+          <height>18</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="about">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="toolTip">
+         <string>About</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../../resources.qrc">
+          <normaloff>:/icons/about</normaloff>:/icons/about</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>18</width>
+          <height>18</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <spacer name="contentSpacer2">
@@ -41,19 +131,174 @@
      </spacer>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="content">
+     <layout class="QHBoxLayout" name="content">
       <property name="leftMargin">
-       <number>128</number>
+       <number>32</number>
       </property>
       <property name="topMargin">
        <number>64</number>
       </property>
       <property name="rightMargin">
-       <number>128</number>
+       <number>32</number>
       </property>
       <property name="bottomMargin">
        <number>64</number>
       </property>
+      <item>
+       <spacer name="previewSpacer2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="preview">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="previewInfo">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>8</number>
+          </property>
+          <property name="topMargin">
+           <number>8</number>
+          </property>
+          <property name="rightMargin">
+           <number>8</number>
+          </property>
+          <property name="bottomMargin">
+           <number>8</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="previewAppId">
+            <item>
+             <widget class="QLabel" name="previewAppIdText">
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Application ID</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="previewAppIdEdit">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="toolTip">
+               <string>Edit application id</string>
+              </property>
+              <property name="icon">
+               <iconset resource="../../resources.qrc">
+                <normaloff>:/icons/edit</normaloff>:/icons/edit</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="ClickableLabel" name="previewDetails">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Edit activity details</string>
+            </property>
+            <property name="text">
+             <string>Details</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ClickableLabel" name="previewState">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+            <property name="toolTip">
+             <string>Edit activity state</string>
+            </property>
+            <property name="text">
+             <string>State</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="previewExtras">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <property name="leftMargin">
+           <number>4</number>
+          </property>
+          <property name="topMargin">
+           <number>4</number>
+          </property>
+          <property name="rightMargin">
+           <number>4</number>
+          </property>
+          <property name="bottomMargin">
+           <number>4</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="previewAssets">
+            <property name="text">
+             <string>Assets</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="previewSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </item>
     <item>
@@ -69,12 +314,9 @@
       </property>
      </spacer>
     </item>
-    <item>
-     <layout class="QHBoxLayout" name="footer"/>
-    </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -109,6 +351,11 @@
    <addaction name="menuSettings"/>
    <addaction name="menuHelp"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
   <action name="aboutQt">
    <property name="checkable">
     <bool>false</bool>
@@ -124,6 +371,15 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>ClickableLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">clickablelabel.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

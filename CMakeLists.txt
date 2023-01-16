@@ -8,11 +8,16 @@ set(CMAKE_AUTOUIC ON)
 
 set(RICHCORD_ROOT_PATH "${CMAKE_SOURCE_DIR}/src")
 set(RICHCORD_CORE_SOURCE_PATH "${RICHCORD_ROOT_PATH}/core")
+set(RICHCORD_WIDGET_SOURCE_PATH "${RICHCORD_ROOT_PATH}/widget")
 set(RICHCORD_WINDOW_SOURCE_PATH "${RICHCORD_ROOT_PATH}/window")
 
 set(RICHCORD_CORE_SOURCES
         "${RICHCORD_CORE_SOURCE_PATH}/app.h"
         "${RICHCORD_CORE_SOURCE_PATH}/app.cpp"
+        )
+set(RICHCORD_WIDGET_SOURCES
+        "${RICHCORD_WIDGET_SOURCE_PATH}/clickablelabel.h"
+        "${RICHCORD_WIDGET_SOURCE_PATH}/clickablelabel.cpp"
         )
 set(RICHCORD_WINDOW_SOURCES
         "${RICHCORD_WINDOW_SOURCE_PATH}/mainwindow.h"
@@ -28,6 +33,7 @@ add_subdirectory(gamesdk)
 list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS
         ${RICHCORD_ROOT_PATH}
         ${RICHCORD_CORE_SOURCE_PATH}
+        ${RICHCORD_WIDGET_SOURCE_PATH}
         ${RICHCORD_WINDOW_SOURCE_PATH}
         )
 find_package(Qt6 COMPONENTS
@@ -43,6 +49,7 @@ add_executable(${RICHCORD_TARGET}
         ${RICHCORD_UI_FILES}
         ${RICHCORD_RESOURCE_FILE}
         ${RICHCORD_CORE_SOURCES}
+        ${RICHCORD_WIDGET_SOURCES}
         ${RICHCORD_WINDOW_SOURCES}
         "${RICHCORD_ROOT_PATH}/main.cpp"
         "${RICHCORD_ROOT_PATH}/version.rc"
@@ -54,6 +61,7 @@ set_target_properties(${RICHCORD_TARGET} PROPERTIES
 target_include_directories(${RICHCORD_TARGET} PRIVATE
         "${CMAKE_AUTOGEN_BUILD_DIR}/include"
         ${RICHCORD_CORE_SOURCE_PATH}
+        ${RICHCORD_WIDGET_SOURCE_PATH}
         ${RICHCORD_WINDOW_SOURCE_PATH}
         )
 target_link_libraries(${RICHCORD_TARGET}
